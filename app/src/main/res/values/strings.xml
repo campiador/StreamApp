@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Stream App</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+</resources>
