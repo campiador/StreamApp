@@ -8,11 +8,16 @@ import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+//TODO: (1) Strict mode; (2) Different HLS streams; (3) RTSP streams; (4) bitrates;
+
+
 
 public class MultiStream extends AppCompatActivity {
 
     private VideoView video1;
     private VideoView video2;
+
+    private static int VIDEO_COUNT = 9;
 
     private final static String SAMPLE_HLS_URL =
             "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8";
@@ -24,9 +29,10 @@ public class MultiStream extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_stream);
-        createVideoStream();
-//        createVideoStream();
-//        createVideoStream();
+        for (int i=0; i < VIDEO_COUNT; i++) {
+            createVideoStream();
+        }
+
 //
 //        video1=(VideoView)findcViewById(R.id.videoView2);
 //        video1.setVideoURI(Uri.parse(SAMPLE_RTSP_URL));
@@ -71,8 +77,9 @@ public class MultiStream extends AppCompatActivity {
     private int mVideoCount = 0;
 
     private void createVideoStream() {
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linear_frame);
         mVideoCount++;
+        LinearLayout linearLayout = (LinearLayout)
+                findViewById(mVideoCount < VIDEO_COUNT/2 + 1 ? R.id.linear_frame1 : R.id.linear_frame2);
         VideoView videoView = new VideoView(this);
         linearLayout.addView(videoView);
         videoView.setVideoURI(Uri.parse((SAMPLE_HLS_URL)));
