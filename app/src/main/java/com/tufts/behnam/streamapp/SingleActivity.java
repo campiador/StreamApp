@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -24,7 +23,7 @@ import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class SingleActivity extends AppCompatActivity {
 
     private final static String SAMPLE_HLS_URL =
             "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8";
@@ -51,16 +50,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(MainActivity.this, "Loading HLS Stream", Toast.LENGTH_LONG).show();
+                Toast.makeText(SingleActivity.this, "Loading HLS Stream", Toast.LENGTH_LONG).show();
                 videoView.setVideoPath(SAMPLE_HLS_URL);
-                videoView.setMediaController(new MediaController(MainActivity.this));
+                videoView.setMediaController(new MediaController(SingleActivity.this));
             }
         });
 
         bHLS.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Toast.makeText(MainActivity.this, "Long click on HLS!", Toast.LENGTH_LONG).show();
+                Toast.makeText(SingleActivity.this, "Long click on HLS!", Toast.LENGTH_LONG).show();
 
                 return false;
             }
@@ -69,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
         bRTSP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Loading RTSP Stream", Toast.LENGTH_LONG).show();
+                Toast.makeText(SingleActivity.this, "Loading RTSP Stream", Toast.LENGTH_LONG).show();
 
                 videoView.setVideoPath(SAMPLE_RTSP_URL);
-                videoView.setMediaController(new MediaController(MainActivity.this));
+                videoView.setMediaController(new MediaController(SingleActivity.this));
             }
         });
 

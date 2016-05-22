@@ -1,11 +1,11 @@
 package com.tufts.behnam.streamapp;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.VideoView;
 
 //TODO: (1) Strict mode; (2) Different HLS streams; (3) RTSP streams; (4) bitrates;
@@ -17,8 +17,9 @@ public class MultiStream extends AppCompatActivity {
     private VideoView video1;
     private VideoView video2;
 
-    private static int VIDEO_COUNT = 9;
+    private static int DEFAULT_VIDEO_COUNT = 10;
 
+//    bitrate ~= 3400 kbps
     private final static String SAMPLE_HLS_URL =
             "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8";
     private final static String SAMPLE_RTSP_URL =
@@ -28,9 +29,15 @@ public class MultiStream extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        int streamCount = DEFAULT_VIDEO_COUNT;
+        if (intent != null) {
+             streamCount = intent.getIntExtra(WelcomeActivity.EXTRA_STREAM_COUNT,
+                     DEFAULT_VIDEO_COUNT);
+        }
         setContentView(R.layout.activity_multi_stream);
-        for (int i=0; i < VIDEO_COUNT; i++) {
-            createVideoStream();
+        for (int i=0; i < streamCount; i++) {
+            createVideoStream(i, streamCount);
         }
 
 //
@@ -74,12 +81,11 @@ public class MultiStream extends AppCompatActivity {
 
     }
 
-    private int mVideoCount = 0;
 
-    private void createVideoStream() {
-        mVideoCount++;
+    private void createVideoStream(int index, int max) {
         LinearLayout linearLayout = (LinearLayout)
-                findViewById(mVideoCount < VIDEO_COUNT/2 + 1 ? R.id.linear_frame1 : R.id.linear_frame2);
+                findViewById(index < max/2 + 1 ?
+                        R.id.linear_frame1 : R.id.linear_frame2);
         VideoView videoView = new VideoView(this);
         linearLayout.addView(videoView);
         videoView.setVideoURI(Uri.parse((SAMPLE_HLS_URL)));
