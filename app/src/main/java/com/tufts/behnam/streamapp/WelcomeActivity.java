@@ -6,17 +6,24 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     public static final String EXTRA_STREAM_COUNT = "extra_stream_count";
+    private static final String TAG = "STREAM_APP";
     private Button bSingle;
     private Button bMulti;
+    private Button bPerfTest;
+
     private EditText etStreamCount;
+    private TextView tvPerfTest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,8 @@ public class WelcomeActivity extends AppCompatActivity {
         bSingle = (Button) findViewById(R.id.button3);
         bMulti = (Button) findViewById(R.id.button4);
         etStreamCount = (EditText) findViewById(R.id.editText_streamcount);
+        bPerfTest = (Button) findViewById(R.id.button_perftest);
+        tvPerfTest = (TextView) findViewById(R.id.textView_perftest);
 
         final Intent single = new Intent(this, SingleActivity.class);
         final Intent multi = new Intent(this, MultiStream.class);
@@ -68,6 +77,20 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        final Perf perf = new Perf();
+
+        bPerfTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Clicked on perf test button!");
+                tvPerfTest.setText("text changed on: " + System.currentTimeMillis());
+                String perfResults = perf.stat();
+                tvPerfTest.setText(perfResults);
+
+            }
+        });
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
