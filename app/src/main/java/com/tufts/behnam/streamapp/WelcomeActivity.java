@@ -3,7 +3,6 @@ package com.tufts.behnam.streamapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,10 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tufts.behnam.streamapp.com.tufts.behnam.streamapp.utils.Perf;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     public static final String EXTRA_STREAM_COUNT = "extra_stream_count";
-    private static final String TAG = "STREAM_APP";
+    public static final String TAG = "STREAM_APP";
     private Button bSingle;
     private Button bMulti;
     private Button bPerfTest;
@@ -85,6 +86,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "Clicked on perf test button!");
                 tvPerfTest.setText("text changed on: " + System.currentTimeMillis());
+
                 String perfResults = perf.stat();
                 tvPerfTest.setText(perfResults);
 
