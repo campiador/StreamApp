@@ -18,9 +18,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public static final String EXTRA_STREAM_COUNT = "extra_stream_count";
     public static final String TAG = "STREAM_APP";
+
     private Button bSingle;
     private Button bMulti;
-    private Button bPerfTest;
+    private Button bPerfTestStat;
+    private Button bPerfTestRecord;
 
     private EditText etStreamCount;
     private TextView tvPerfTest;
@@ -36,8 +38,9 @@ public class WelcomeActivity extends AppCompatActivity {
         bSingle = (Button) findViewById(R.id.button3);
         bMulti = (Button) findViewById(R.id.button4);
         etStreamCount = (EditText) findViewById(R.id.editText_streamcount);
-        bPerfTest = (Button) findViewById(R.id.button_perftest);
+        bPerfTestStat = (Button) findViewById(R.id.button_perftest_stat);
         tvPerfTest = (TextView) findViewById(R.id.textView_perftest);
+        bPerfTestRecord = (Button) findViewById(R.id.button_perftest_record);
 
         final Intent single = new Intent(this, SingleActivity.class);
         final Intent multi = new Intent(this, MultiStream.class);
@@ -81,10 +84,10 @@ public class WelcomeActivity extends AppCompatActivity {
 
         final Perf perf = new Perf();
 
-        bPerfTest.setOnClickListener(new View.OnClickListener() {
+        bPerfTestStat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Clicked on perf test button!");
+                Log.d(TAG, "Clicked on perf test stat button!");
                 tvPerfTest.setText("text changed on: " + System.currentTimeMillis());
 
                 String perfResults = perf.stat();
@@ -93,6 +96,16 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        bPerfTestRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Clicked on perf test record button!");
+                tvPerfTest.setText("text changed on: " + System.currentTimeMillis());
+
+                String perfResults = perf.record();
+                tvPerfTest.setText(perfResults);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.tufts.behnam.streamapp.WelcomeActivity;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -22,14 +23,41 @@ public class Perf {
     }
 
     public String record() {
-
+//asd
         try {
-            Process proc = Runtime.getRuntime().exec("/data/perf record -a -F 1000 sleep 5");
+            String output = "";
+            Runtime.getRuntime().exec("su");
+            //BUGFIX: have to switch to the /data directory, and it does not work with cd data
+            Process proc=Runtime.getRuntime().exec("./perf record -o '/data/perf.newout' " +
+                    "-a -F 1000 sleep 5",
+                    null, new File("/data/"));
+            proc.waitFor();
+
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(proc.getInputStream()));
-            return bufferedReader.toString();
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(proc.getErrorStream()));
+
+            String line;
+            while((line = bufferedReader.readLine() )!= null) {
+                output = output + line;
+            }
+
+            output = output + "\nSTDERROR:\n";
+
+            while((line = stdError.readLine() )!= null) {
+                output = output + line;
+            }
+
+
+            return output;
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            Log.e(WelcomeActivity.TAG, "Error while waiting for proc");
+
+            e.printStackTrace();
+
         }
         return null;
 
@@ -39,8 +67,11 @@ public class Perf {
         try {
             String output = "";
             Runtime.getRuntime().exec("su");
+//            Runtime.getRuntime().exec("ls", null, new File("/data/"));
             Process proc = Runtime.getRuntime()
-                    .exec("/data/perf stat -B dd if=/dev/zero of=/dev/null count=100000");
+                    .exec("./perf stat -B dd if=/dev/zero of=/dev/null count=100000",
+//                    .exec("pwd",
+                            null, new File("/data/"));
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(proc.getInputStream()));
 
@@ -48,9 +79,13 @@ public class Perf {
                     InputStreamReader(proc.getErrorStream()));
 
             String line;
-//            while((line = bufferedReader.readLine() )!= null) {
-//                output = output + line;
-//            }
+            output = output + "\nSTDOUT:\n";
+
+            while((line = bufferedReader.readLine() )!= null) {
+                output = output + line;
+            }
+
+            output = output + "\nSTDERR:\n";
 
             while((line = stdError.readLine() )!= null) {
                 output = output + line;
