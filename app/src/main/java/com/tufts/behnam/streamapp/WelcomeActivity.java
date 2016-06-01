@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button bMulti;
     private Button bPerfTestStat;
     private Button bPerfTestRecord;
+    private Button bPerfTestReport;
 
     private EditText etStreamCount;
     private TextView tvPerfTest;
@@ -30,8 +33,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+//
+//        setProgressBarIndeterminate(true);
+//        setProgressBarIndeterminateVisibility(true);
+//        setSupportProgressBarVisibility(true);
+//        setSupportProgressBarIndeterminateVisibility(true);
+//
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -41,6 +51,7 @@ public class WelcomeActivity extends AppCompatActivity {
         bPerfTestStat = (Button) findViewById(R.id.button_perftest_stat);
         tvPerfTest = (TextView) findViewById(R.id.textView_perftest);
         bPerfTestRecord = (Button) findViewById(R.id.button_perftest_record);
+        bPerfTestReport = (Button) findViewById(R.id.button_perftest_report);
 
         final Intent single = new Intent(this, SingleActivity.class);
         final Intent multi = new Intent(this, MultiStream.class);
@@ -104,6 +115,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 String perfResults = perf.record();
                 tvPerfTest.setText(perfResults);
+                tvPerfTest.setMovementMethod(new ScrollingMovementMethod());
+
+            }
+        });
+
+        bPerfTestReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Clicked on perf test record button!");
+                tvPerfTest.setText("text changed on: " + System.currentTimeMillis());
+
+                String perfResults = perf.report();
+                tvPerfTest.setText(perfResults);
+                tvPerfTest.setMovementMethod(new ScrollingMovementMethod());
             }
         });
 

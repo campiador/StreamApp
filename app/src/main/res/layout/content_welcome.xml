@@ -78,7 +78,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1"
+        android:weightSum="1.5"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/editText_streamcount"
@@ -102,6 +102,13 @@
             android:layout_height="wrap_content"
             android:text="Test Perf Record"
             android:id="@+id/button_perftest_record" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Test Perf Report"
+            android:id="@+id/button_perftest_report"
+            android:layout_weight="0.5" />
 
     </LinearLayout>
 </RelativeLayout>

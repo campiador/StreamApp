@@ -87,7 +87,9 @@ public class MultiStream extends AppCompatActivity {
                 findViewById(index < max/2 + 1 ?
                         R.id.linear_frame1 : R.id.linear_frame2);
         VideoView videoView = new VideoView(this);
-        linearLayout.addView(videoView);
+        videoView.setKeepScreenOn(true);
+//        to prevent sleeping while streaming:
+//        linearLayout.addView(videoView);
         videoView.setVideoURI(Uri.parse((SAMPLE_HLS_URL)));
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.tufts.behnam.streamapp.com.tufts.behnam.streamapp.utils;
 
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.tufts.behnam.streamapp.WelcomeActivity;
@@ -28,8 +29,9 @@ public class Perf {
             String output = "";
             Runtime.getRuntime().exec("su");
             //BUGFIX: have to switch to the /data directory, and it does not work with cd data
-            Process proc=Runtime.getRuntime().exec("./perf record -o '/data/perf.newout' " +
-                    "-a -F 1000 sleep 5",
+            Process proc=Runtime.getRuntime().exec("./perf record -v " +
+                    "-e 'skb:consume_skb' -o /data/data/com.tufts.behnam.streamapp/perf.data " +
+                    "-a -F -g 1000 sleep 5",
                     null, new File("/data/"));
             proc.waitFor();
 
@@ -39,6 +41,8 @@ public class Perf {
                     InputStreamReader(proc.getErrorStream()));
 
             String line;
+            output = output + "\nSTDOUT:\n";
+
             while((line = bufferedReader.readLine() )!= null) {
                 output = output + line;
             }
@@ -69,7 +73,7 @@ public class Perf {
             Runtime.getRuntime().exec("su");
 //            Runtime.getRuntime().exec("ls", null, new File("/data/"));
             Process proc = Runtime.getRuntime()
-                    .exec("./perf stat -B dd if=/dev/zero of=/dev/null count=100000",
+                    .exec("./perf stat -B dd if=/dev/zero of=/dev/null count=1000",
 //                    .exec("pwd",
                             null, new File("/data/"));
             BufferedReader bufferedReader = new BufferedReader(
@@ -145,6 +149,7 @@ public class Perf {
         }
     }
 
+    @Nullable
     private String perf_test(){
         try {
             String output = "";
@@ -164,6 +169,80 @@ public class Perf {
         }
         return null;
     }
+
+    public String report() {
+        try {
+            String output = "";
+            Runtime.getRuntime().exec("su");
+    //            Runtime.getRuntime().exec("ls", null, new File("/data/"));
+            Process proc = Runtime.getRuntime()
+                    .exec("./perf report -i /data/data/com.tufts.behnam.streamapp/perf.data",
+    //                    .exec("pwd",
+                            null, new File("/data/"));
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(proc.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(proc.getErrorStream()));
+
+            String line;
+            output = output + "\nSTDOUT:\n";
+
+            while((line = bufferedReader.readLine() )!= null) {
+                output = output + line;
+            }
+
+            output = output + "\nSTDERR:\n";
+
+            while((line = stdError.readLine() )!= null) {
+                output = output + line;
+            }
+
+            return output;
+    } catch (IOException e) {
+            e.printStackTrace();
+        }
+    return null;
+    }
+
+    public String skbTest(){
+        try {
+            String output = "";
+            Runtime.getRuntime().exec("su");
+            //            Runtime.getRuntime().exec("ls", null, new File("/data/"));
+            Process proc = Runtime.getRuntime()
+                    .exec("./perf report -i /data/data/com.tufts.behnam.streamapp/perf.data" +
+                            "-e 'skb:consume_skb'",
+
+                            //                    .exec("pwd",
+                            null, new File("/data/"));
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(proc.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(proc.getErrorStream()));
+
+            String line;
+            output = output + "\nSTDOUT:\n";
+
+            while((line = bufferedReader.readLine() )!= null) {
+                output = output + line;
+            }
+
+            output = output + "\nSTDERR:\n";
+
+            while((line = stdError.readLine() )!= null) {
+                output = output + line;
+            }
+
+            return output;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
 
 
